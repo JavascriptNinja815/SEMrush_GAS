@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+</head>
+
+<body>
+  <span class="current" id="url"></span>
+  <div id="chart"></div>
+  
+
+  <script>
+    
+    google.charts.load('current', {packages: ['corechart', 'line']});
+     
+    google.charts.setOnLoadCallback(getSpreadsheetData);
+
+    function getSpreadsheetData() {
+    google.script.run.withSuccessHandler(drawChart).getSpreadsheetData();
+    
+    }
+
+    function drawChart(returnData) {
+    var URLData = JSON.parse(returnData);
+    var URL = URLData[0];
+    var rows = URLData[1];
+    if(rows!=undefined){
+      console.log(rows);
+      var data = google.visualization.arrayToDataTable(rows, false);
+      
+      
+    
+      
+      var options = {
+        title: 'Organic Traffic Chart',
+        legend: { position: 'top' },
+        
+        chartArea: {
+          width: '80%'
+        },
+        vAxis: {
+          textStyle: {
+            fontFamily: 'Arial',
+            fontSize: 12
+          }
+        }
+      };
+
+      $('#url').text(URL);
+      var chart1 = new google.visualization.LineChart(document.getElementById("chart"));
+      chart1.draw(data, options);
+    }else{
+      $('#url').text(URL);
+    }
+    
+  
+    }
+  </script>
+</body>
+
+</html>
